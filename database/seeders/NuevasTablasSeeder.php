@@ -154,19 +154,21 @@ class NuevasTablasSeeder extends Seeder
                         $cliente = $clientes->random();
                         $fechaPedido = Carbon::now()->subDays(rand(1, 5));
 
-                        $pedido = Pedido::create([
-                            'empresa_id' => $empresa->id,
-                            'numero' => 'PED-' . $empresa->id . '-' . str_pad($idx + 1, 4, '0', STR_PAD_LEFT),
-                            'cliente_id' => $cliente->id,
-                            'user_id' => $admin?->id ?? 1,
-                            'fecha_pedido' => $fechaPedido,
-                            'fecha_entrega_estimada' => $fechaPedido->copy()->addDays(2),
-                            'subtotal' => 0,
-                            'impuesto' => 0,
-                            'total' => 0,
-                            'estado' => $estado,
-                            'observacion' => "Pedido de prueba {$estado}",
-                        ]);
+                        $numeroPedido = 'PED-' . $empresa->id . '-' . time() . '-' . ($idx + 1);
+                        $pedido = Pedido::firstOrCreate(
+                            ['empresa_id' => $empresa->id, 'numero' => $numeroPedido],
+                            [
+                                'cliente_id' => $cliente->id,
+                                'user_id' => $admin?->id ?? 1,
+                                'fecha_pedido' => $fechaPedido,
+                                'fecha_entrega_estimada' => $fechaPedido->copy()->addDays(2),
+                                'subtotal' => 0,
+                                'impuesto' => 0,
+                                'total' => 0,
+                                'estado' => $estado,
+                                'observacion' => "Pedido de prueba {$estado}",
+                            ]
+                        );
 
                         $subtotal = 0;
                         $items = $productos->random(rand(2, 3));
