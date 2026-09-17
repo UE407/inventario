@@ -156,7 +156,7 @@ class NuevasTablasSeeder extends Seeder
 
                         $pedido = Pedido::create([
                             'empresa_id' => $empresa->id,
-                            'numero' => 'PED-' . str_pad($idx + 1, 6, '0', STR_PAD_LEFT),
+                            'numero' => 'PED-' . $empresa->id . '-' . str_pad($idx + 1, 4, '0', STR_PAD_LEFT),
                             'cliente_id' => $cliente->id,
                             'user_id' => $admin?->id ?? 1,
                             'fecha_pedido' => $fechaPedido,
